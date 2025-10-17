@@ -1,11 +1,18 @@
 ﻿FROM node:18-bookworm-slim AS build
 WORKDIR /app
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
+# npm 11 corrige el bug de optional deps
+RUN npm i -g npm@11.6.2
+
 COPY package*.json ./
 RUN npm ci --include=optional
 COPY . .
-# clave: forzar SWC a usar WASM
-RUN SWC_DISABLE_NATIVE=1 npm run build
+
+# Forzar caminos sin binarios nativos
+ENV SWC_DISABLE_NATIVE=1
+ENV ROLLUP_SKIP_NODEJS_NATIVE=1
+RUN npm run build
+
 RUN npm prune --omit=dev
 
 FROM node:18-bookworm-slim
