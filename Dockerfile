@@ -2,9 +2,10 @@
 WORKDIR /app
 RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --include=optional
 COPY . .
-RUN npm run build
+# clave: forzar SWC a usar WASM
+RUN SWC_DISABLE_NATIVE=1 npm run build
 RUN npm prune --omit=dev
 
 FROM node:18-bookworm-slim
