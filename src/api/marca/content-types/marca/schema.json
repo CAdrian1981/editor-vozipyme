@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "marcas",
+  "info": { "singularName": "marca", "pluralName": "marcas", "displayName": "Marca" },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "nombre": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "nombre", "required": true, "unique": true },
+    "logo": { "type": "media", "multiple": false },
+    "descripcion_corta": { "type": "text" },
+    "tarifas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::tarifa.tarifa",
+      "mappedBy": "marca"
+    }
+  }
+}

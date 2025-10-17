@@ -1,0 +1,11 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tipo_servicios",
+  "info": { "singularName": "tipo-servicio", "pluralName": "tipo-servicios", "displayName": "Tipo servicio" },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "nombre": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "nombre", "required": true, "unique": true },
+    "icono": { "type": "media", "multiple": false }
+  }
+}
