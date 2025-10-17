@@ -1,20 +1,16 @@
 ﻿FROM node:18-bookworm-slim AS build
 WORKDIR /app
 
-# toolchain para nativos
 RUN apt-get update && apt-get install -y python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
-# ← SIN --omit=dev (instala también devDependencies)
-RUN npm ci
+# incluye optional deps (donde viene el binario de @swc/core)
+RUN npm ci --include=optional
 
 COPY . .
-# asegúrate de tener los binarios listos
 RUN npm rebuild @swc/core @parcel/watcher --build-from-source=false
 RUN npm run build
-
-# limpia dev para el runtime
 RUN npm prune --omit=dev
 
 FROM node:18-bookworm-slim
